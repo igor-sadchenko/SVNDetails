@@ -39,12 +39,6 @@ Version history
 Version 1.0 Initial release
 
 
-Contact
--------
-
-thomas.hein(at)inform-ac(dot)com
-
-
 License
 -------
 
