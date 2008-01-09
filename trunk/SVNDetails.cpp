@@ -207,14 +207,15 @@ struct stFields
 {
   char* name;
   int type;
+  char* unit;
 };
 
 stFields fields[] = {
-  {"SVN Author",      ft_string},
-  {"SVN Lock owner",  ft_string},
-  {"SVN Revision",    ft_numeric_32},
-  {"SVN Status",      ft_string},
-  {"SVN URL",         ft_string},
+  {"SVN Author",      ft_string,      ""},
+  {"SVN Lock owner",  ft_string,      ""},
+  {"SVN Revision",    ft_numeric_32,  ""},
+  {"SVN Status",      ft_string,      ""},
+  {"SVN URL",         ft_string,      ""},
 };
 
 char* strlcpy(char* p, const char* p2, int maxlen)
@@ -242,6 +243,7 @@ int __stdcall ContentGetSupportedField(int fieldIndex, char* fieldName, char* un
   }
 
   strlcpy(fieldName, fields[fieldIndex].name, maxlen-1);
+  strlcpy(units, fields[fieldIndex].unit, maxlen-1);
 
   return fields[fieldIndex].type;
 }
