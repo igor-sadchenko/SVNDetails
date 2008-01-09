@@ -36,7 +36,13 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 Version history
 ---------------
 
-Version 1.0 Initial release
+Version 1.01 (080109)
+  BUGFIX: "When I run a fresh TC installation ...  and then installing the plug-in it will show the units
+  of the field "tc.file type" which are "file", "folder" and "reparse point" as units for this plug-in."
+  (Thanks to Lefteous for reporting this issue).
+
+Version 1.00 (080107)
+  Initial release
 
 
 License

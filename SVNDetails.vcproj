@@ -139,7 +139,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				IgnoreImportLibrary="true"
 				OutputFile="$(OutDir)\$(ProjectName).wdx"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\SVNDetails.def"
