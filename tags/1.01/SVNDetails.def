@@ -1,0 +1,6 @@
+EXPORTS
+  ContentGetDetectString
+  ContentGetSupportedField
+  ContentGetValue
+  ContentSetDefaultParams
+  ContentStopGetValue
