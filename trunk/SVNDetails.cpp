@@ -149,14 +149,14 @@ bool CSVNDetails::EnsurePipeOpen()
     return true;
   }
 
-  m_hPipe = CreateFile(TSVN_CACHE_PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+  m_hPipe = CreateFile(GetCachePipeName(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
 
   if (m_hPipe == INVALID_HANDLE_VALUE && GetLastError() == ERROR_PIPE_BUSY) {
     // TSVNCache is running but is busy connecting a different client.
     // Do not give up immediately but wait for a few milliseconds until
     // the server has created the next pipe instance
-    if (WaitNamedPipe(TSVN_CACHE_PIPE_NAME, 50)) {
-      m_hPipe = CreateFile(TSVN_CACHE_PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+    if (WaitNamedPipe(GetCachePipeName(), 50)) {
+      m_hPipe = CreateFile(GetCachePipeName(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
     }
   }
 
