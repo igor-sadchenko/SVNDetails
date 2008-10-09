@@ -1,4 +1,4 @@
-SVNDetails 1.1 - a TortoiseSVN plugin for Total Commander 7.x
+SVNDetails 1.2 - a TortoiseSVN plugin for Total Commander 7.x
 =============================================================
 
 Plugin description
@@ -35,6 +35,11 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 
 Version history
 ---------------
+
+Version 1.20 (081009)
+  ADD: SVN Prop Status
+  CHANGE: SVN Status => SVN Text Status
+  CHANGE: Improved performance when CONTENT_DELAYIFSLOW is set
 
 Version 1.10 (080714)
   CHANGE: Supports TortoiseSVN 1.5.x ONLY!

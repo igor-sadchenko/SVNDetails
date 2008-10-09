@@ -203,6 +203,62 @@ void CSVNDetails::ClosePipe()
 //////////////////////////////////////////////////////////////////////////
 
 
+const char* GetSVNStatus(svn_wc_status_kind status)
+{
+  switch (status) {
+    case svn_wc_status_none:
+      return "None";
+
+    case svn_wc_status_unversioned:
+      return "Unversioned";
+
+    case svn_wc_status_normal:
+      return "Normal";
+
+    case svn_wc_status_added:
+      return "Added";
+
+    case svn_wc_status_missing:
+      return "Missing";
+
+    case svn_wc_status_deleted:
+      return "Deleted";
+
+    case svn_wc_status_replaced:
+      return "Replaced";
+
+    case svn_wc_status_modified:
+      return "Modified";
+
+    case svn_wc_status_merged:
+      return "Merged";
+
+    case svn_wc_status_conflicted:
+      return "Conflicted";
+
+    case svn_wc_status_ignored:
+      return "Ignored";
+
+    case svn_wc_status_obstructed:
+      return "Obstructed";
+
+    case svn_wc_status_external:
+      return "External";
+
+    case svn_wc_status_incomplete:
+      return "Incomplete";
+
+    default:
+      break;
+  }
+
+  return "";
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
 struct stFields
 {
   char* name;
@@ -213,8 +269,9 @@ struct stFields
 stFields fields[] = {
   {"SVN Author",      ft_string,      ""},
   {"SVN Lock owner",  ft_string,      ""},
+  {"SVN Prop Status", ft_string,      ""},
   {"SVN Revision",    ft_numeric_32,  ""},
-  {"SVN Status",      ft_string,      ""},
+  {"SVN Text Status", ft_string,      ""},
   {"SVN URL",         ft_string,      ""},
 };
 
@@ -276,74 +333,19 @@ int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, voi
         strlcpy((char*)fieldValue, returnedStatus.m_owner, maxlen-1);
         break;
 
-      case 2: // "SVN Revision"
+      case 2: // "SVN Prop Status"
+        strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_status.prop_status), maxlen-1);
+        break;
+
+      case 3: // "SVN Revision"
         *(int*)fieldValue = returnedStatus.m_entry.cmt_rev;
         break;
 
-      case 3: // "SVN Status"
-        switch (returnedStatus.m_status.text_status) {
-          case svn_wc_status_none:
-            strlcpy((char*)fieldValue, "None", maxlen-1);
-            break;
-
-          case svn_wc_status_unversioned:
-            strlcpy((char*)fieldValue, "Unversioned", maxlen-1);
-            break;
-
-          case svn_wc_status_normal:
-            strlcpy((char*)fieldValue, "Normal", maxlen-1);
-            break;
-
-          case svn_wc_status_added:
-            strlcpy((char*)fieldValue, "Added", maxlen-1);
-            break;
-
-          case svn_wc_status_missing:
-            strlcpy((char*)fieldValue, "Missing", maxlen-1);
-            break;
-
-          case svn_wc_status_deleted:
-            strlcpy((char*)fieldValue, "Deleted", maxlen-1);
-            break;
-
-          case svn_wc_status_replaced:
-            strlcpy((char*)fieldValue, "Replaced", maxlen-1);
-            break;
-
-          case svn_wc_status_modified:
-            strlcpy((char*)fieldValue, "Modified", maxlen-1);
-            break;
-
-          case svn_wc_status_merged:
-            strlcpy((char*)fieldValue, "Merged", maxlen-1);
-            break;
-
-          case svn_wc_status_conflicted:
-            strlcpy((char*)fieldValue, "Conflicted", maxlen-1);
-            break;
-
-          case svn_wc_status_ignored:
-            strlcpy((char*)fieldValue, "Ignored", maxlen-1);
-            break;
-
-          case svn_wc_status_obstructed:
-            strlcpy((char*)fieldValue, "Obstructed", maxlen-1);
-            break;
-
-          case svn_wc_status_external:
-            strlcpy((char*)fieldValue, "External", maxlen-1);
-            break;
-
-          case svn_wc_status_incomplete:
-            strlcpy((char*)fieldValue, "Incomplete", maxlen-1);
-            break;
-
-          default:
-            break;
-        }
+      case 4: // "SVN Text Status"
+        strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_status.text_status), maxlen-1);
         break;
 
-      case 4: // "SVN URL"
+      case 5: // "SVN URL"
         strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
         break;
 
