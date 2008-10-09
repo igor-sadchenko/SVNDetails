@@ -251,6 +251,12 @@ int __stdcall ContentGetSupportedField(int fieldIndex, char* fieldName, char* un
 int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, void* fieldValue, int maxlen, int flags)
 {
   CString sFilename(fileName);
+
+  if (flags & CONTENT_DELAYIFSLOW) {
+    strlcpy((char*)fieldValue, "...", maxlen-1);
+    return ft_delayed;
+  }
+
   WIN32_FIND_DATA fd = {NULL};
   HANDLE fh = FindFirstFile(sFilename, &fd);
 
