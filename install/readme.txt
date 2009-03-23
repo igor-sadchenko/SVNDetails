@@ -7,15 +7,16 @@ Plugin description
 SVNDetails is a content plugin and displays the following TortoiseSVN fields in Total Commander
   - SVN Author
   - SVN Lock owner
+  - SVN Property Status
   - SVN Revision
-  - SVN Status
+  - SVN Text Status
   - SVN URL
 
 
 Prerequisites
 -------------
 
-This plugin has been successfully tested with Total Commander 7.03 and TortoiseSVN 1.5.0, Build 13316 on
+This plugin has been successfully tested with Total Commander 7.04a and TortoiseSVN 1.5.9, Build 15518 on
 Microsoft Windows XP Professional (x86) and Microsoft Windows Vista Business (x64), but it MAY work with
 other versions, too ;-)
 
@@ -35,6 +36,9 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 
 Version history
 ---------------
+
+Version 1.21 (090323)
+  CHANGE: TortoiseSVN (external) updated to 1.5.9
 
 Version 1.20 (081009)
   ADD: SVN Prop Status
@@ -56,7 +60,7 @@ Version 1.00 (080107)
 License
 -------
 
-Copyright (c) 2008 by Thomas Hein, INFORM GmbH, Germany
+Copyright (c) 2008-2009 by Thomas Hein, INFORM GmbH, Germany
 
 This plugin is freeware.
 
