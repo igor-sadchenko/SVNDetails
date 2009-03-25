@@ -7,6 +7,9 @@
 // TC
 #include "contentplug.h"
 
+// Forward declaration
+void ClearStatusMap();
+
 #ifdef _MANAGED
 #pragma managed(push, off)
 #endif
@@ -15,9 +18,16 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
   switch (ul_reason_for_call) {
     case DLL_PROCESS_ATTACH:
+      break;
+
     case DLL_THREAD_ATTACH:
+      break;
+
     case DLL_THREAD_DETACH:
+      break;
+
     case DLL_PROCESS_DETACH:
+      ClearStatusMap();
       break;
 
     default:
@@ -203,56 +213,73 @@ void CSVNDetails::ClosePipe()
 //////////////////////////////////////////////////////////////////////////
 
 
-const char* GetSVNStatus(svn_wc_status_kind status)
+CAtlMap<svn_wc_status_kind, const char*> g_statusMap;
+
+char* strlcpy(char* p, const char* p2, int maxlen)
 {
-  switch (status) {
-    case svn_wc_status_none:
-      return "None";
-
-    case svn_wc_status_unversioned:
-      return "Unversioned";
-
-    case svn_wc_status_normal:
-      return "Normal";
-
-    case svn_wc_status_added:
-      return "Added";
-
-    case svn_wc_status_missing:
-      return "Missing";
-
-    case svn_wc_status_deleted:
-      return "Deleted";
-
-    case svn_wc_status_replaced:
-      return "Replaced";
-
-    case svn_wc_status_modified:
-      return "Modified";
-
-    case svn_wc_status_merged:
-      return "Merged";
-
-    case svn_wc_status_conflicted:
-      return "Conflicted";
-
-    case svn_wc_status_ignored:
-      return "Ignored";
-
-    case svn_wc_status_obstructed:
-      return "Obstructed";
-
-    case svn_wc_status_external:
-      return "External";
-
-    case svn_wc_status_incomplete:
-      return "Incomplete";
-
-    default:
-      break;
+  if ((int)strlen(p2) >= maxlen) {
+    strncpy(p, p2, maxlen);
+    p[maxlen] = NULL;
+  }
+  else {
+    strcpy(p, p2);
   }
 
-  return "";
+  return p;
+}
+
+void FillStatusMap(const char* iniFilename)
+{
+  const int maxLen = 32;
+  const char* section = "SVNDetails";
+
+  #define AddStatusValue(key, default) { \
+    char* buf = new char[maxLen]; \
+    if (GetPrivateProfileStringA(section, #key, "", buf, maxLen, iniFilename) == 0) { \
+      strlcpy(buf, default, maxLen); \
+      WritePrivateProfileStringA(section, #key, default, iniFilename); \
+    } \
+    g_statusMap.SetAt(key, buf); \
+  }
+
+  AddStatusValue(svn_wc_status_none,         "None");
+  AddStatusValue(svn_wc_status_unversioned,  "Unversioned");
+  AddStatusValue(svn_wc_status_normal,       "Normal");
+  AddStatusValue(svn_wc_status_added,        "Added");
+  AddStatusValue(svn_wc_status_missing,      "Missing");
+  AddStatusValue(svn_wc_status_deleted,      "Deleted");
+  AddStatusValue(svn_wc_status_replaced,     "Replaced");
+  AddStatusValue(svn_wc_status_modified,     "Modified");
+  AddStatusValue(svn_wc_status_merged,       "Merged");
+  AddStatusValue(svn_wc_status_conflicted,   "Conflicted");
+  AddStatusValue(svn_wc_status_ignored,      "Ignored");
+  AddStatusValue(svn_wc_status_obstructed,   "Obstructed");
+  AddStatusValue(svn_wc_status_external,     "External");
+  AddStatusValue(svn_wc_status_incomplete,   "Incomplete");
+
+  return;
+}
+
+const char* GetSVNStatus(svn_wc_status_kind status)
+{
+  const char* result = NULL;
+
+  if (g_statusMap.Lookup(status, result)) {
+    return result;
+  }
+
+  return "Unknown";
+}
+
+void ClearStatusMap()
+{
+  POSITION pos = g_statusMap.GetStartPosition();
+
+  while (pos) {
+    delete g_statusMap.GetNext(pos)->m_value;
+  }
+
+  return;
 }
 
 
@@ -274,19 +301,6 @@ stFields fields[] = {
   {"SVN Text Status", ft_string,      ""},
   {"SVN URL",         ft_string,      ""},
 };
-
-char* strlcpy(char* p, const char* p2, int maxlen)
-{
-  if ((int)strlen(p2) >= maxlen) {
-    strncpy(p, p2, maxlen);
-    p[maxlen] = NULL;
-  }
-  else {
-    strcpy(p, p2);
-  }
-
-  return p;
-}
 
 int __stdcall ContentGetDetectString(char* detectString, int maxlen)
 {
@@ -362,6 +376,8 @@ int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, voi
 
 void __stdcall ContentSetDefaultParams(ContentDefaultParamStruct* dps)
 {
+  FillStatusMap(dps->DefaultIniName);
+
   return;
 }
 

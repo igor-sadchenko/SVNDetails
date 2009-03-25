@@ -1,4 +1,4 @@
-SVNDetails 1.2 - a TortoiseSVN plugin for Total Commander 7.x
+SVNDetails 1.3 - a TortoiseSVN plugin for Total Commander 7.x
 =============================================================
 
 Plugin description
@@ -37,6 +37,10 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 Version history
 ---------------
 
+Version 1.30 (090325)
+  CHANGE: SVN Status text now configurable via contplug.ini
+  (Thanks to Klaus Fülscher for feature request ;-)
+
 Version 1.21 (090323)
   CHANGE: TortoiseSVN (external) updated to 1.5.9
 
@@ -47,7 +51,7 @@ Version 1.20 (081009)
 
 Version 1.10 (080714)
   CHANGE: Supports TortoiseSVN 1.5.x ONLY!
-  
+
 Version 1.01 (080109)
   BUGFIX: "When I run a fresh TC installation ...  and then installing the plug-in it will show the units
   of the field "tc.file type" which are "file", "folder" and "reparse point" as units for this plug-in."
