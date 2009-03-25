@@ -30,6 +30,7 @@
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// Einige CString-Konstruktoren sind explizit.
 
 #include <atlbase.h>
+#include <atlcoll.h>
 #include <atlstr.h>
 
 // TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
