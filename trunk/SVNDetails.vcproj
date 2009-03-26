@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="ext\TortoiseSVN\ext\Subversion\subversion\include;ext\TortoiseSVN\ext\apr\include;ext\TortoiseSVN\src\TSVNCache"
+				AdditionalIncludeDirectories="ext\TortoiseSVN\ext\Subversion\subversion\include;ext\TortoiseSVN\ext\apr\include;ext\TortoiseSVN\src\TSVNCache;ext\TortoiseSVN\src\Utils"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SVNDETAILS_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="ext\TortoiseSVN\ext\Subversion\subversion\include;ext\TortoiseSVN\ext\apr\include;ext\TortoiseSVN\src\TSVNCache"
+				AdditionalIncludeDirectories="ext\TortoiseSVN\ext\Subversion\subversion\include;ext\TortoiseSVN\ext\apr\include;ext\TortoiseSVN\src\TSVNCache;ext\TortoiseSVN\src\Utils"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SVNDETAILS_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -189,6 +189,10 @@
 				>
 			</File>
 			<File
+				RelativePath="ext\TortoiseSVN\src\Utils\Registry.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -224,6 +228,10 @@
 			>
 			<File
 				RelativePath="ext\TortoiseSVN\src\TSVNCache\CacheInterface.h"
+				>
+			</File>
+			<File
+				RelativePath="ext\TortoiseSVN\src\Utils\registry.h"
 				>
 			</File>
 			<File
