@@ -3,6 +3,7 @@
 // SVN / Tortoise
 #include "svn_wc.h"
 #include "CacheInterface.h"
+#include "registry.h"
 
 // TC
 #include "contentplug.h"
@@ -59,10 +60,11 @@ class CSVNDetails
     OVERLAPPED m_Overlapped;
     HANDLE m_hEvent;
     CComCriticalSection m_critSec;
+    long m_lastTimeout;
 };
 
 CSVNDetails::CSVNDetails()
-  : m_hPipe(INVALID_HANDLE_VALUE), m_hEvent(INVALID_HANDLE_VALUE)
+  : m_hPipe(INVALID_HANDLE_VALUE), m_hEvent(INVALID_HANDLE_VALUE), m_lastTimeout(0)
 {
   m_critSec.Init();
 
@@ -80,7 +82,46 @@ CSVNDetails::~CSVNDetails()
 bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheResponse* pReturnedStatus, bool bRecursive)
 {
   if (!EnsurePipeOpen()) {
-    return false;
+    // We've failed to open the pipe - try and start the cache
+    // but only if the last try to start the cache was a certain time
+    // ago. If we just try over and over again without a small pause
+    // in between, the explorer is rendered unusable!
+    // Failing to start the cache can have different reasons: missing exe,
+    // missing registry key, corrupt exe, ...
+
+    if (((long) GetTickCount() - m_lastTimeout) < 0) {
+      return false;
+    }
+
+    STARTUPINFO startup;
+    PROCESS_INFORMATION process;
+    memset(&startup, 0, sizeof(startup));
+    startup.cb = sizeof(startup);
+    memset(&process, 0, sizeof(process));
+
+    CRegStdString cachePath(_T("Software\\TortoiseSVN\\CachePath"), _T("TSVNCache.exe"), false, HKEY_LOCAL_MACHINE);
+    CString sCachePath = cachePath;
+
+    if (CreateProcess(sCachePath.GetBuffer(sCachePath.GetLength()+1), _T(""), NULL, NULL, FALSE, 0, 0, 0, &startup, &process) ==0) {
+      // It's not appropriate to do a message box here, because there may be hundreds of calls
+      sCachePath.ReleaseBuffer();
+      ATLTRACE("Failed to start cache\n");
+      return false;
+    }
+
+    CloseHandle(process.hThread);
+    CloseHandle(process.hProcess);
+    sCachePath.ReleaseBuffer();
+
+    // Wait for the cache to open
+    long endTime = (long) GetTickCount() + 1000;
+
+    while(!EnsurePipeOpen()) {
+      if (((long) GetTickCount() - endTime) > 0) {
+        m_lastTimeout = (long) GetTickCount() + 10000;
+        return false;
+      }
+    }
   }
 
   AutoLocker lock(m_critSec);

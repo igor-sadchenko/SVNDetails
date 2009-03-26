@@ -37,6 +37,10 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 Version history
 ---------------
 
+Version 1.31 (090326)
+  CHANGE: TSVNCache.exe will be automatically started if not running
+  (Thanks to tufftaeh for idea to do so ;-)
+  
 Version 1.30 (090325)
   CHANGE: SVN Status text now configurable via contplug.ini
   (Thanks to Klaus Fülscher for feature request ;-)
