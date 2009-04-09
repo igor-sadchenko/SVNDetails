@@ -100,7 +100,7 @@ bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheRespons
     memset(&process, 0, sizeof(process));
 
     CRegStdString cachePath(_T("Software\\TortoiseSVN\\CachePath"), _T("TSVNCache.exe"), false, HKEY_LOCAL_MACHINE);
-    CString sCachePath = cachePath;
+    CString sCachePath = ((tstring) cachePath).c_str();
 
     if (CreateProcess(sCachePath.GetBuffer(sCachePath.GetLength()+1), _T(""), NULL, NULL, FALSE, 0, 0, 0, &startup, &process) ==0) {
       // It's not appropriate to do a message box here, because there may be hundreds of calls
