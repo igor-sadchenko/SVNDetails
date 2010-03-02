@@ -341,6 +341,8 @@ stFields fields[] = {
   {"SVN Revision",    ft_numeric_32,  ""},
   {"SVN Text Status", ft_string,      ""},
   {"SVN URL",         ft_string,      ""},
+  {"SVN short URL",   ft_string,      ""},
+
 };
 
 int __stdcall ContentGetDetectString(char* detectString, int maxlen)
@@ -403,6 +405,17 @@ int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, voi
       case 5: // "SVN URL"
         strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
         break;
+
+      case 6: // "SVN short URL"
+        char* tok;
+        strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
+        if ((tok = strstr((char*)fieldValue,"trunk")) != NULL)
+          strncpy((char*)fieldValue, --tok, maxlen-1);
+        if ((tok = strstr((char*)fieldValue,"branches")) != NULL)
+          strncpy((char*)fieldValue, --tok, maxlen-1);
+        if ((tok = strstr((char*)fieldValue,"tags")) != NULL)
+          strncpy((char*)fieldValue, --tok, maxlen-1);
+      break; 
 
       default:
         return ft_nosuchfield;
