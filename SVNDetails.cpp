@@ -28,7 +28,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
       break;
 
     case DLL_PROCESS_DETACH:
-      ClearStatusMap();
       break;
 
     default:
@@ -438,4 +437,9 @@ void __stdcall ContentSetDefaultParams(ContentDefaultParamStruct* dps)
 void __stdcall ContentStopGetValue(char* fileName)
 {
   return;
+}
+
+void __stdcall ContentPluginUnloading(void)
+{
+	ClearStatusMap();
 }
