@@ -420,6 +420,14 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Ressourcendateien"
+			>
+			<File
+				RelativePath=".\SVNDetails.rc"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
