@@ -133,7 +133,7 @@ bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheRespons
     request.flags |= TSVNCACHE_FLAGS_RECUSIVE_STATUS;
   }
 
-  wcsncpy_s(request.path, MAX_PATH+1, path, MAX_PATH);
+  _tcsncpy_s(request.path, MAX_PATH+1, path, MAX_PATH);
 
   ZeroMemory(&m_Overlapped, sizeof(OVERLAPPED));
   m_Overlapped.hEvent = m_hEvent;
@@ -269,6 +269,27 @@ char* strlcpy(char* p, const char* p2, int maxlen)
   return p;
 }
 
+WCHAR* awlcopy(WCHAR* outname, const char* inname, int maxlen)
+{
+  if (inname) {
+    int ret = MultiByteToWideChar(CP_ACP, 0, inname, -1, outname, maxlen);
+	if (ret) {
+      outname[maxlen] = 0;
+    }
+	else {
+      outname = NULL;
+	}
+    return outname;
+  }
+  else
+    return NULL;
+}
+
+#ifndef countof
+#define countof(str) (sizeof(str)/sizeof(str[0]))
+#endif
+#define awfilenamecopy(outname, inname) awlcopy(outname, inname, countof(outname) - 1)
+
 void FillStatusMap(const char* iniFilename)
 {
   const int maxLen = 32;
@@ -352,7 +373,7 @@ int __stdcall ContentGetDetectString(char* detectString, int maxlen)
 
 int __stdcall ContentGetSupportedField(int fieldIndex, char* fieldName, char* units, int maxlen)
 {
-  if ((fieldIndex < 0) || (fieldIndex >= sizeof(fields) / sizeof(fields[0]))) {
+  if ((fieldIndex < 0) || (fieldIndex >= countof(fields))) {
     return ft_nomorefields;
   }
 
@@ -364,10 +385,16 @@ int __stdcall ContentGetSupportedField(int fieldIndex, char* fieldName, char* un
 
 int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, void* fieldValue, int maxlen, int flags)
 {
-  CString sFilename(fileName);
+	WCHAR fileNameW[MAX_PATH+1];
+	return ContentGetValueW(awfilenamecopy(fileNameW, fileName), fieldIndex, unitIndex, fieldValue, maxlen, flags);
+}
+
+int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, void* fieldValue, int maxlen, int flags)
+{
+  const ATL::CString sFilename(fileName, MAX_PATH+1);
 
   if (flags & CONTENT_DELAYIFSLOW) {
-    strlcpy((char*)fieldValue, "...", maxlen-1);
+    strlcpy((char*)fieldValue, "\0", maxlen-1);
     return ft_delayed;
   }
 
