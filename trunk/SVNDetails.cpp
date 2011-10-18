@@ -254,6 +254,7 @@ void CSVNDetails::ClosePipe()
 
 
 CAtlMap<svn_wc_status_kind, const char*> g_statusMap;
+CSVNDetails* svnDetails = NULL;
 
 char* strlcpy(char* p, const char* p2, int maxlen)
 {
@@ -376,48 +377,55 @@ int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, voi
   if (fh != INVALID_HANDLE_VALUE) {
     FindClose(fh);
 
-    CSVNDetails svnDetails;
-    TSVNCacheResponse returnedStatus = {NULL};
-    svnDetails.GetStatusFromRemoteCache(sFilename, &returnedStatus, true);
+    if (svnDetails) {
+      TSVNCacheResponse returnedStatus = {NULL};
+      if (svnDetails->GetStatusFromRemoteCache(sFilename, &returnedStatus, true)) {
+        switch (fieldIndex) {
+          case 0: // "SVN Author"
+            strlcpy((char*)fieldValue, returnedStatus.m_author, maxlen-1);
+            break;
 
-    switch (fieldIndex) {
-      case 0: // "SVN Author"
-        strlcpy((char*)fieldValue, returnedStatus.m_author, maxlen-1);
-        break;
+          case 1: // "SVN Lock owner"
+            strlcpy((char*)fieldValue, returnedStatus.m_owner, maxlen-1);
+            break;
 
-      case 1: // "SVN Lock owner"
-        strlcpy((char*)fieldValue, returnedStatus.m_owner, maxlen-1);
-        break;
+          case 2: // "SVN Prop Status"
+            strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_status.prop_status), maxlen-1);
+            break;
 
-      case 2: // "SVN Prop Status"
-        strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_status.prop_status), maxlen-1);
-        break;
+          case 3: // "SVN Revision"
+            *(int*)fieldValue = returnedStatus.m_entry.cmt_rev;
+            break;
 
-      case 3: // "SVN Revision"
-        *(int*)fieldValue = returnedStatus.m_entry.cmt_rev;
-        break;
+          case 4: // "SVN Text Status"
+            strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_status.text_status), maxlen-1);
+            break;
 
-      case 4: // "SVN Text Status"
-        strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_status.text_status), maxlen-1);
-        break;
+          case 5: // "SVN URL"
+            strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
+            break;
 
-      case 5: // "SVN URL"
-        strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
-        break;
+          case 6: // "SVN short URL"
+            char* tok;
+            strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
+            if ((tok = strstr((char*)fieldValue,"trunk")) != NULL)
+              strncpy((char*)fieldValue, --tok, maxlen-1);
+            if ((tok = strstr((char*)fieldValue,"branches")) != NULL)
+              strncpy((char*)fieldValue, --tok, maxlen-1);
+            if ((tok = strstr((char*)fieldValue,"tags")) != NULL)
+              strncpy((char*)fieldValue, --tok, maxlen-1);
+            break;
 
-      case 6: // "SVN short URL"
-        char* tok;
-        strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
-        if ((tok = strstr((char*)fieldValue,"trunk")) != NULL)
-          strncpy((char*)fieldValue, --tok, maxlen-1);
-        if ((tok = strstr((char*)fieldValue,"branches")) != NULL)
-          strncpy((char*)fieldValue, --tok, maxlen-1);
-        if ((tok = strstr((char*)fieldValue,"tags")) != NULL)
-          strncpy((char*)fieldValue, --tok, maxlen-1);
-      break; 
-
-      default:
-        return ft_nosuchfield;
+          default:
+            return ft_nosuchfield;
+        }
+      }
+      else {
+        return ft_fileerror;
+      }
+    }
+    else {
+      return ft_fileerror;
     }
   }
   else {
@@ -430,7 +438,7 @@ int __stdcall ContentGetValue(char* fileName, int fieldIndex, int unitIndex, voi
 void __stdcall ContentSetDefaultParams(ContentDefaultParamStruct* dps)
 {
   FillStatusMap(dps->DefaultIniName);
-
+  svnDetails = new CSVNDetails();
   return;
 }
 
@@ -441,5 +449,8 @@ void __stdcall ContentStopGetValue(char* fileName)
 
 void __stdcall ContentPluginUnloading(void)
 {
-	ClearStatusMap();
+    delete svnDetails;
+    svnDetails = NULL;
+    ClearStatusMap();
+    return;
 }
