@@ -80,18 +80,16 @@ CSVNDetails::~CSVNDetails()
 
 bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheResponse* pReturnedStatus, bool bRecursive)
 {
-  if (!EnsurePipeOpen()) {
+  if(!EnsurePipeOpen())
+  {
     // We've failed to open the pipe - try and start the cache
     // but only if the last try to start the cache was a certain time
     // ago. If we just try over and over again without a small pause
     // in between, the explorer is rendered unusable!
     // Failing to start the cache can have different reasons: missing exe,
     // missing registry key, corrupt exe, ...
-
-    if (((long) GetTickCount() - m_lastTimeout) < 0) {
+    if (((long)GetTickCount() - m_lastTimeout) < 0)
       return false;
-    }
-
     STARTUPINFO startup;
     PROCESS_INFORMATION process;
     memset(&startup, 0, sizeof(startup));
@@ -100,24 +98,24 @@ bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheRespons
 
     CRegStdString cachePath(_T("Software\\TortoiseSVN\\CachePath"), _T("TSVNCache.exe"), false, HKEY_LOCAL_MACHINE);
     CString sCachePath = ((tstring) cachePath).c_str();
-
-    if (CreateProcess(sCachePath.GetBuffer(sCachePath.GetLength()+1), _T(""), NULL, NULL, FALSE, 0, 0, 0, &startup, &process) ==0) {
+    if (CreateProcess(sCachePath.GetBuffer(sCachePath.GetLength()+1), NULL, NULL, NULL, FALSE, 0, 0, 0, &startup, &process)==0)
+    {
       // It's not appropriate to do a message box here, because there may be hundreds of calls
       sCachePath.ReleaseBuffer();
       ATLTRACE("Failed to start cache\n");
       return false;
     }
-
     CloseHandle(process.hThread);
     CloseHandle(process.hProcess);
     sCachePath.ReleaseBuffer();
 
     // Wait for the cache to open
-    long endTime = (long) GetTickCount() + 1000;
-
-    while(!EnsurePipeOpen()) {
-      if (((long) GetTickCount() - endTime) > 0) {
-        m_lastTimeout = (long) GetTickCount() + 10000;
+    long endTime = (long)GetTickCount()+1000;
+    while(!EnsurePipeOpen())
+    {
+      if(((long)GetTickCount() - endTime) > 0)
+      {
+        m_lastTimeout = (long)GetTickCount()+10000;
         return false;
       }
     }
@@ -125,19 +123,16 @@ bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheRespons
 
   AutoLocker lock(m_critSec);
 
+  DWORD nBytesRead;
   TSVNCacheRequest request;
-  ZeroMemory(&request, sizeof(request));
   request.flags = TSVNCACHE_FLAGS_NONOTIFICATIONS;
-
-  if (bRecursive) {
+  if(bRecursive)
+  {
     request.flags |= TSVNCACHE_FLAGS_RECUSIVE_STATUS;
   }
-
-  _tcsncpy_s(request.path, MAX_PATH+1, path, MAX_PATH);
-
-  ZeroMemory(&m_Overlapped, sizeof(OVERLAPPED));
+  wcsncpy_s(request.path, MAX_PATH+1, path, MAX_PATH);
+  SecureZeroMemory(&m_Overlapped, sizeof(OVERLAPPED));
   m_Overlapped.hEvent = m_hEvent;
-
   // Do the transaction in overlapped mode.
   // That way, if anything happens which might block this call
   // we still can get out of it. We NEVER MUST BLOCK THE SHELL!
@@ -146,17 +141,22 @@ bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheRespons
   // to such a problem is a reboot and therefore they might loose
   // valuable data.
   // One particular situation where the shell could hang is when
-  // the cache crashes and our crashreport dialog comes up.
+  // the cache crashes and our crash report dialog comes up.
   // Sure, it would be better to have no situations where the shell
   // even can get blocked, but the timeout of 10 seconds is long enough
   // so that users still recognize that something might be wrong and
   // report back to us so we can investigate further.
 
-  DWORD nBytesRead = 0;
-  BOOL fSuccess = TransactNamedPipe(m_hPipe, &request, sizeof(request), pReturnedStatus, sizeof(*pReturnedStatus), &nBytesRead, &m_Overlapped);
+  BOOL fSuccess = TransactNamedPipe(m_hPipe,
+    &request, sizeof(request),
+    pReturnedStatus, sizeof(*pReturnedStatus),
+    &nBytesRead, &m_Overlapped);
 
-  if (!fSuccess) {
-    if (GetLastError() != ERROR_IO_PENDING) {
+  if (!fSuccess)
+  {
+    if (GetLastError()!=ERROR_IO_PENDING)
+    {
+      //OutputDebugStringA("TortoiseShell: TransactNamedPipe failed\n");
       ClosePipe();
       return false;
     }
@@ -164,71 +164,100 @@ bool CSVNDetails::GetStatusFromRemoteCache(const CString& path, TSVNCacheRespons
     // TransactNamedPipe is working in an overlapped operation.
     // Wait for it to finish
     DWORD dwWait = WaitForSingleObject(m_hEvent, 10000);
-    if (dwWait == WAIT_OBJECT_0) {
+    if (dwWait == WAIT_OBJECT_0)
+    {
       fSuccess = GetOverlappedResult(m_hPipe, &m_Overlapped, &nBytesRead, FALSE);
     }
-    else {
+    else
+    {
       // the cache didn't respond!
       fSuccess = FALSE;
     }
   }
 
-  if (fSuccess) {
-    if (nBytesRead == sizeof(TSVNCacheResponse)) {
+  if (fSuccess)
+  {
+    if(nBytesRead == sizeof(TSVNCacheResponse))
+    {
       // This is a full response - we need to fix-up some pointers
       pReturnedStatus->m_status.entry = &pReturnedStatus->m_entry;
       pReturnedStatus->m_entry.url = pReturnedStatus->m_url;
     }
-    else {
+    else
+    {
       pReturnedStatus->m_status.entry = NULL;
     }
 
     return true;
   }
-
   ClosePipe();
-
   return false;
 }
 
 bool CSVNDetails::EnsurePipeOpen()
 {
   AutoLocker lock(m_critSec);
-
-  if (m_hPipe != INVALID_HANDLE_VALUE) {
+  if(m_hPipe != INVALID_HANDLE_VALUE)
+  {
     return true;
   }
 
-  m_hPipe = CreateFile(GetCachePipeName(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+  m_hPipe = CreateFile(
+    GetCachePipeName(),       // pipe name
+    GENERIC_READ |          // read and write access
+    GENERIC_WRITE,
+    0,                // no sharing
+    NULL,             // default security attributes
+    OPEN_EXISTING,          // opens existing pipe
+    FILE_FLAG_OVERLAPPED,     // default attributes
+    NULL);              // no template file
 
-  if (m_hPipe == INVALID_HANDLE_VALUE && GetLastError() == ERROR_PIPE_BUSY) {
+  if (m_hPipe == INVALID_HANDLE_VALUE && GetLastError() == ERROR_PIPE_BUSY)
+  {
     // TSVNCache is running but is busy connecting a different client.
     // Do not give up immediately but wait for a few milliseconds until
     // the server has created the next pipe instance
-    if (WaitNamedPipe(GetCachePipeName(), 50)) {
-      m_hPipe = CreateFile(GetCachePipeName(), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+    if (WaitNamedPipe(GetCachePipeName(), 50))
+    {
+      m_hPipe = CreateFile(
+        GetCachePipeName(),       // pipe name
+        GENERIC_READ |          // read and write access
+        GENERIC_WRITE,
+        0,                // no sharing
+        NULL,             // default security attributes
+        OPEN_EXISTING,          // opens existing pipe
+        FILE_FLAG_OVERLAPPED,     // default attributes
+        NULL);              // no template file
     }
   }
 
-  if (m_hPipe != INVALID_HANDLE_VALUE) {
+  if (m_hPipe != INVALID_HANDLE_VALUE)
+  {
     // The pipe connected; change to message-read mode.
-    DWORD dwMode = PIPE_READMODE_MESSAGE;
+    DWORD dwMode;
 
-    if (!SetNamedPipeHandleState(m_hPipe, &dwMode, NULL, NULL)) {
+    dwMode = PIPE_READMODE_MESSAGE;
+    if(!SetNamedPipeHandleState(
+      m_hPipe,    // pipe handle
+      &dwMode,  // new pipe mode
+      NULL,     // don't set maximum bytes
+      NULL))    // don't set maximum time
+    {
+      ATLTRACE("SetNamedPipeHandleState failed");
       CloseHandle(m_hPipe);
       m_hPipe = INVALID_HANDLE_VALUE;
-
       return false;
     }
-
     // create an unnamed (=local) manual reset event for use in the overlapped structure
-    m_hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-
-    if (m_hEvent) {
+    if ((m_hEvent != INVALID_HANDLE_VALUE)&&(m_hEvent != NULL))
       return true;
-    }
-
+    m_hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    if (m_hEvent)
+      return true;
+        m_hEvent = INVALID_HANDLE_VALUE;
+    ATLTRACE("CreateEvent failed");
     ClosePipe();
+    return false;
   }
 
   return false;
@@ -238,15 +267,13 @@ void CSVNDetails::ClosePipe()
 {
   AutoLocker lock(m_critSec);
 
-  if (m_hPipe != INVALID_HANDLE_VALUE) {
+  if(m_hPipe != INVALID_HANDLE_VALUE)
+  {
     CloseHandle(m_hPipe);
-    m_hPipe = INVALID_HANDLE_VALUE;
-
     CloseHandle(m_hEvent);
+    m_hPipe = INVALID_HANDLE_VALUE;
     m_hEvent = INVALID_HANDLE_VALUE;
   }
-
-  return;
 }
 
 
@@ -362,7 +389,7 @@ stFields fields[] = {
   {"SVN Revision",    ft_numeric_32,  ""},
   {"SVN Text Status", ft_string,      ""},
   {"SVN URL",         ft_string,      ""},
-  {"SVN short URL",   ft_string,      ""},
+  {"SVN Short URL",   ft_string,      ""},
 
 };
 
@@ -432,7 +459,7 @@ int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, v
             strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
             break;
 
-          case 6: // "SVN short URL"
+          case 6: // "SVN Short URL"
             char* tok;
             strlcpy((char*)fieldValue, returnedStatus.m_url, maxlen-1);
             if ((tok = strstr((char*)fieldValue,"trunk")) != NULL)
