@@ -1,6 +1,6 @@
 [plugininstall]
-description=SVNDetails displays some Tortoise SVN fields in Total Commander.
-descriptiondeu=SVNDetails zeigt einige Tortoise SVN Felder im Total Commander an.
+description=SVNDetails displays some TortoiseSVN fields in Total Commander.
+descriptiondeu=SVNDetails zeigt einige TortoiseSVN Felder im Total Commander an.
 type=wdx
 file=SVNDetails.wdx
 defaultdir=SVNDetails
