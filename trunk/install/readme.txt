@@ -11,6 +11,7 @@ SVNDetails is a content plugin and displays the following TortoiseSVN fields in 
   - SVN Revision
   - SVN Text Status
   - SVN URL
+  - SVN Short URL
 
 
 Prerequisites
