@@ -1,0 +1,31 @@
+#include "windows.h"
+
+//
+// Version Information resources
+//
+1 VERSIONINFO
+    FILEVERSION     2,1,0,0
+    PRODUCTVERSION  2,1,0,0
+    FILEOS          VOS_UNKNOWN
+    FILETYPE        VFT_DLL
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "Comments", "For use with Total Commander (www.ghisler.com)"
+            VALUE "FileDescription", "TortoiseSVN plugin for Total Commander"
+            VALUE "FileVersion", "2.1.0.0"
+            VALUE "InternalName", "SVNDetails"
+            VALUE "LegalCopyright", "Copyright © 2008-2011  by Thomas Hein, INFORM GmbH, Germany"
+            VALUE "OriginalFilename", "SVNDetails.wdx"
+            VALUE "ProductName", "WDX-SVNDETAILS"
+            VALUE "ProductVersion", "2.1.0.0"
+            VALUE "SpecialBuild", "TortoiseSVN 1.6.x"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0, 1200
+    END
+END
