@@ -1,36 +1,67 @@
-// stdafx.h : Includedatei für Standardsystem-Includedateien
-// oder häufig verwendete projektspezifische Includedateien,
-// die nur in unregelmäßigen Abständen geändert werden.
-//
+// stdafx.h : include file for standard system include files,
+// or project specific include files that are used frequently,
+// but are changed infrequently
 
 #pragma once
-
-// Ändern Sie folgende Definitionen für Plattformen, die älter als die unten angegebenen sind.
-// In MSDN finden Sie die neuesten Informationen über die entsprechenden Werte für die unterschiedlichen Plattformen.
-#ifndef WINVER				// Lassen Sie die Verwendung spezifischer Features von Windows XP oder später zu.
-#define WINVER 0x0501		// Ändern Sie dies in den geeigneten Wert für andere Versionen von Windows.
+// Modify the following defines if you have to target a platform prior to the ones specified below.
+// Refer to MSDN for the latest info on corresponding values for different platforms.
+#ifndef WINVER                  // Specifies that the minimum required platform is Windows Vista.
+#define WINVER 0x0600           // Change this to the appropriate value to target other versions of Windows.
 #endif
 
-#ifndef _WIN32_WINNT		// Lassen Sie die Verwendung spezifischer Features von Windows XP oder später zu.                   
-#define _WIN32_WINNT 0x0501	// Ändern Sie dies in den geeigneten Wert für andere Versionen von Windows.
-#endif						
-
-#ifndef _WIN32_WINDOWS		// Lassen Sie die Verwendung spezifischer Features von Windows 98 oder später zu.
-#define _WIN32_WINDOWS 0x0410 // Ändern Sie dies in den geeigneten Wert für Windows Me oder höher.
+#ifndef _WIN32_WINNT            // Specifies that the minimum required platform is Windows Vista.
+#define _WIN32_WINNT 0x0600     // Change this to the appropriate value to target other versions of Windows.
 #endif
 
-#ifndef _WIN32_IE			// Lassen Sie die Verwendung spezifischer Features von IE 6.0 oder später zu.
-#define _WIN32_IE 0x0600	// Ändern Sie dies in den geeigneten Wert für andere Versionen von IE.
+#ifndef _WIN32_WINDOWS          // Specifies that the minimum required platform is Windows 98.
+#define _WIN32_WINDOWS 0x0410   // Change this to the appropriate value to target Windows Me or later.
 #endif
 
-#define WIN32_LEAN_AND_MEAN		// Selten verwendete Teile der Windows-Header nicht einbinden.
-// Windows-Headerdateien:
+#ifndef _WIN32_IE               // Specifies that the minimum required platform is Internet Explorer 7.0.
+#define _WIN32_IE 0x0700        // Change this to the appropriate value to target other versions of IE.
+#endif
+
+#define ISOLATION_AWARE_ENABLED 1
+
+#include <WinSock2.h>
+#include <Ws2tcpip.h>
+#include <Wspiapi.h>
 #include <windows.h>
 
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// Einige CString-Konstruktoren sind explizit.
+#include <commctrl.h>
+#include <Shlobj.h>
+#include <Shlwapi.h>
+#include <tchar.h>
+#include <wininet.h>
+#include <Aclapi.h>
 
 #include <atlbase.h>
 #include <atlcoll.h>
+#include <atlexcept.h>
 #include <atlstr.h>
 
-// TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
+#pragma warning(push)
+#pragma warning(disable: 4702)  // Unreachable code warnings in xtree
+#include <string>
+#include <set>
+#include <map>
+#include <vector>
+#include <algorithm>
+#pragma warning(pop)
+
+#pragma warning(push)
+#include "apr_general.h"
+#include "svn_pools.h"
+#include "svn_client.h"
+#include "svn_path.h"
+#include "svn_wc.h"
+#include "svn_utf.h"
+#include "svn_config.h"
+#include "svn_subst.h"
+#include "svn_props.h"
+#pragma warning(pop)
+
+#include "SysInfo.h"
+#include "DebugOutput.h"
+
+#define CSTRING_AVAILABLE
