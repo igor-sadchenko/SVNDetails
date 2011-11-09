@@ -49,6 +49,64 @@
 #include <algorithm>
 #pragma warning(pop)
 
+#ifndef WIN64
+  // libapr_tsvn32
+  #undef apr_array_make
+  #define apr_array_make _apr_array_make
+
+  #undef apr_array_pop
+  #define apr_array_pop _apr_array_pop
+
+  #undef apr_array_push
+  #define apr_array_push _apr_array_push
+
+  #undef apr_hash_count
+  #define apr_hash_count _apr_hash_count
+
+  #undef apr_hash_first
+  #define apr_hash_first _apr_hash_first
+
+  #undef apr_hash_get
+  #define apr_hash_get _apr_hash_get
+
+  #undef apr_hash_make
+  #define apr_hash_make _apr_hash_make
+
+  #undef apr_hash_next
+  #define apr_hash_next _apr_hash_next
+
+  #undef apr_hash_set
+  #define apr_hash_set _apr_hash_set
+
+  #undef apr_hash_this
+  #define apr_hash_this _apr_hash_this
+
+  #undef apr_initialize
+  #define apr_initialize _apr_initialize
+
+  #undef apr_pool_clear
+  #define apr_pool_clear _apr_pool_clear
+
+  #undef apr_pool_destroy
+  #define apr_pool_destroy _apr_pool_destroy
+
+  #undef apr_pstrdup
+  #define apr_pstrdup _apr_pstrdup
+
+  #undef apr_pstrmemdup
+  #define apr_pstrmemdup _apr_pstrmemdup
+
+  #undef apr_strerror
+  #define apr_strerror _apr_strerror
+
+  // libaprutil_tsvn32
+  #undef apr_uri_parse
+  #define apr_uri_parse _apr_uri_parse
+
+  #undef apr_uri_unparse
+  #define apr_uri_unparse _apr_uri_unparse
+#endif
+
 #pragma warning(push)
 #include "apr_general.h"
 #include "svn_pools.h"
