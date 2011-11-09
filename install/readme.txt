@@ -10,15 +10,14 @@ SVNDetails is a content plugin and displays the following TortoiseSVN fields in 
   - SVN Property Status
   - SVN Revision
   - SVN Text Status
-  - SVN URL
   - SVN Short URL
 
 
 Prerequisites
 -------------
 
-This plugin has been successfully tested with Total Commander 7.56a and TortoiseSVN 1.6.16, Build 21511 on
-Microsoft Windows 7 Enterprise (x64), but it MAY work with other versions, too ;-)
+This plugin has been successfully tested with Total Commander 7.56a, Total Commander 8.0 x64 (Beta 8) and
+TortoiseSVN 1.7.1, Build 22161 on Microsoft Windows 7 Enterprise (x64), but it MAY work with other versions, too ;-)
 
 
 Installation
@@ -37,40 +36,46 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 Version history
 ---------------
 
-Version 2.10 (111024)
+Version 3.00 Beta 1 (20111109)
+  CHANGE: Supports TortoiseSVN 1.7.x ONLY!
+  CHANGE: Update project to Microsoft Visual Studio 2010 (neccessary for TortoiseSVN 1.7)
+  REMOVE: SVN URL is no longer available since there's no easy way getting this info
+  CHANGE: some minor improvements
+
+Version 2.10 (20111024)
   ADD: SVN Short URL to display the URL without hostname (Thanks to yymsc for this change)
   ADD: x64 support (Thanks to tbeu for this change)
   ADD: demo contplug.ini
   CHANGE: some minor improvements
 
-Version 2.00 (090417)
+Version 2.00 (20090417)
   CHANGE: Supports TortoiseSVN 1.6.x ONLY!
 
-Version 1.31 (090326)
+Version 1.31 (20090326)
   CHANGE: TSVNCache.exe will be automatically started if not running
   (Thanks to tufftaeh for idea to do so ;-)
   
-Version 1.30 (090325)
+Version 1.30 (20090325)
   CHANGE: SVN Status text now configurable via contplug.ini
   (Thanks to Klaus Fülscher for feature request ;-)
 
-Version 1.21 (090323)
+Version 1.21 (20090323)
   CHANGE: TortoiseSVN (external) updated to 1.5.9
 
-Version 1.20 (081009)
+Version 1.20 (20081009)
   ADD: SVN Prop Status
   CHANGE: SVN Status => SVN Text Status
   CHANGE: Improved performance when CONTENT_DELAYIFSLOW is set
 
-Version 1.10 (080714)
+Version 1.10 (20080714)
   CHANGE: Supports TortoiseSVN 1.5.x ONLY!
 
-Version 1.01 (080109)
+Version 1.01 (20080109)
   BUGFIX: "When I run a fresh TC installation ...  and then installing the plug-in it will show the units
   of the field "tc.file type" which are "file", "folder" and "reparse point" as units for this plug-in."
   (Thanks to Lefteous for reporting this issue).
 
-Version 1.00 (080107)
+Version 1.00 (20080107)
   Initial release
 
 
