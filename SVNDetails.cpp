@@ -54,20 +54,6 @@ CAtlMap<INT8, const char*> g_statusMap;
 CRemoteCacheLink* g_remoteCacheLink = NULL;
 SVNFolderStatus* g_cachedStatus = NULL;
 
-
-char* strlcpy(char* p, const char* p2, int maxlen)
-{
-  if ((int)strlen(p2) >= maxlen) {
-    strncpy(p, p2, maxlen);
-    p[maxlen] = NULL;
-  }
-  else {
-    strcpy(p, p2);
-  }
-
-  return p;
-}
-
 WCHAR* awlcopy(WCHAR* outname, const char* inname, int maxlen)
 {
   if (inname) {
@@ -91,13 +77,13 @@ WCHAR* awlcopy(WCHAR* outname, const char* inname, int maxlen)
 
 void FillStatusMap(const char* iniFilename)
 {
-  const int maxLen = 32;
+  const int maxlen = 32;
   const char* section = "SVNDetails";
 
   #define AddStatusValue(key, default) { \
-    char* buf = new char[maxLen]; \
-    if (GetPrivateProfileStringA(section, #key, "", buf, maxLen, iniFilename) == 0) { \
-      strlcpy(buf, default, maxLen); \
+    char* buf = new char[maxlen]; \
+    if (GetPrivateProfileStringA(section, #key, "", buf, maxlen, iniFilename) == 0) { \
+      strncpy_s(buf, maxlen, default, maxlen-1); \
       WritePrivateProfileStringA(section, #key, default, iniFilename); \
     } \
     g_statusMap.SetAt(key, buf); \
@@ -174,8 +160,8 @@ int __stdcall ContentGetSupportedField(int fieldIndex, char* fieldName, char* un
     return ft_nomorefields;
   }
 
-  strlcpy(fieldName, fields[fieldIndex].name, maxlen-1);
-  strlcpy(units, fields[fieldIndex].unit, maxlen-1);
+  strncpy_s(fieldName, maxlen, fields[fieldIndex].name, maxlen-1);
+  strncpy_s(units, maxlen, fields[fieldIndex].unit, maxlen-1);
 
   return fields[fieldIndex].type;
 }
@@ -192,7 +178,7 @@ int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, v
   const ATL::CString sFilename(fileName);
 
   if (flags & CONTENT_DELAYIFSLOW) {
-    strlcpy((char*)fieldValue, "\0", maxlen-1);
+    strncpy_s((char*)fieldValue, maxlen, "\0", maxlen-1);
     return ft_delayed;
   }
 
@@ -210,15 +196,15 @@ int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, v
 
         switch (fieldIndex) {
           case 0: // "SVN Author"
-            strlcpy((char*)fieldValue, status->author, maxlen-1);
+            strncpy_s((char*)fieldValue, maxlen, status->author, maxlen-1);
             break;
 
           case 1: // "SVN Lock owner"
-            strlcpy((char*)fieldValue, status->owner, maxlen-1);
+            strncpy_s((char*)fieldValue, maxlen, status->owner, maxlen-1);
             break;
 
           case 2: // "SVN Prop Status"
-            strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_propStatus), maxlen-1);
+            strncpy_s((char*)fieldValue, maxlen, GetSVNStatus(returnedStatus.m_propStatus), maxlen-1);
             break;
 
           case 3: // "SVN Revision"
@@ -226,11 +212,11 @@ int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, v
             break;
 
           case 4: // "SVN Text Status"
-            strlcpy((char*)fieldValue, GetSVNStatus(returnedStatus.m_textStatus), maxlen-1);
+            strncpy_s((char*)fieldValue, maxlen, GetSVNStatus(returnedStatus.m_textStatus), maxlen-1);
             break;
 
           case 5: // "SVN Short URL"
-            strlcpy((char*)fieldValue, status->url, maxlen-1);
+            strncpy_s((char*)fieldValue, maxlen, status->url, maxlen-1);
             break;
 
           default:
