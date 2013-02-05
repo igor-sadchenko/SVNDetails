@@ -188,6 +188,14 @@ int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, v
   if (fh != INVALID_HANDLE_VALUE) {
     FindClose(fh);
 
+    if (!g_remoteCacheLink) {
+      g_remoteCacheLink = new CRemoteCacheLink();
+    }
+
+    if (!g_cachedStatus) {
+      g_cachedStatus = new SVNFolderStatus();
+    }
+
     if (g_remoteCacheLink && g_cachedStatus) {
       CTSVNPath svnPath(fileName);
       TSVNCacheResponse returnedStatus = {NULL};
@@ -241,9 +249,6 @@ int __stdcall ContentGetValueW(WCHAR* fileName, int fieldIndex, int unitIndex, v
 void __stdcall ContentSetDefaultParams(ContentDefaultParamStruct* dps)
 {
   FillStatusMap(dps->DefaultIniName);
-
-  g_remoteCacheLink = new CRemoteCacheLink();
-  g_cachedStatus = new SVNFolderStatus();
 
   return;
 }
