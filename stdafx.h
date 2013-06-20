@@ -84,6 +84,9 @@
   #undef apr_initialize
   #define apr_initialize _apr_initialize
 
+  #undef apr_palloc
+  #define apr_palloc _apr_palloc
+
   #undef apr_pool_clear
   #define apr_pool_clear _apr_pool_clear
 
