@@ -601,6 +601,8 @@ EXPORTS
 	svn_fs_fs__dag_things_different
 	svn_fs_fs__dag_txn_base_root
 	svn_fs_fs__dag_txn_root
+	svn_fs_fs__dag_update_ancestry
+	svn_fs_fs__del_rep_reference
 	svn_fs_fs__deltify
 	svn_fs_fs__deserialize_dir_entries
 	svn_fs_fs__deserialize_id
@@ -1155,6 +1157,7 @@ EXPORTS
 	svn_relpath_skip_ancestor
 	svn_relpath_split
 	svn_repos__compare_files
+	svn_repos__fs_type
 	svn_repos__hooks_post_commit
 	svn_repos__hooks_post_lock
 	svn_repos__hooks_post_revprop_change
@@ -1553,12 +1556,14 @@ EXPORTS
 	svn_wc__changelist_match
 	svn_wc__check_for_obstructions
 	svn_wc__check_wc_root
+	svn_wc__close_db
 	svn_wc__conflict_description2_dup
 	svn_wc__context_create_with_db
 	svn_wc__crawl_file_external
 	svn_wc__create_prejfile
 	svn_wc__db_close_many_wcroots
 	svn_wc__db_pdh_create_wcroot
+	svn_wc__db_read_info_internal
 	svn_wc__db_util_fetch_wc_id
 	svn_wc__db_util_open_db
 	svn_wc__db_wcroot_parse_local_abspath
@@ -1656,6 +1661,7 @@ EXPORTS
 	svn_wc__sync_flags_with_props
 	svn_wc__text_base_path_to_read
 	svn_wc__unserialize_file_external
+	svn_wc__upgrade_add_external_info
 	svn_wc__upgrade_sdb
 	svn_wc__walker_default_error_handler
 	svn_wc__wipe_postupgrade
