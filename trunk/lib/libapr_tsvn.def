@@ -53,6 +53,13 @@ EXPORTS
 	apr_env_delete
 	apr_env_get
 	apr_env_set
+	apr_escape_echo
+	apr_escape_entity
+	apr_escape_hex
+	apr_escape_path
+	apr_escape_path_segment
+	apr_escape_shell
+	apr_escape_urlencoded
 	apr_file_append
 	apr_file_attrs_set
 	apr_file_buffer_set
@@ -142,6 +149,9 @@ EXPORTS
 	apr_hash_pool_get
 	apr_hash_set
 	apr_hash_this
+	apr_hash_this_key
+	apr_hash_this_key_len
+	apr_hash_this_val
 	apr_hashfunc_default
 	apr_initialize
 	apr_ipsubnet_create
@@ -192,6 +202,13 @@ EXPORTS
 	apr_password_get
 	apr_pcalloc
 	apr_pcalloc_debug
+	apr_pescape_echo
+	apr_pescape_entity
+	apr_pescape_hex
+	apr_pescape_path
+	apr_pescape_path_segment
+	apr_pescape_shell
+	apr_pescape_urlencoded
 	apr_pmemdup
 	apr_poll
 	apr_poll_method_defname
@@ -272,11 +289,16 @@ EXPORTS
 	apr_pstrdup
 	apr_pstrmemdup
 	apr_pstrndup
+	apr_punescape_entity
+	apr_punescape_hex
+	apr_punescape_url
 	apr_pvsprintf
 	apr_rfc822_date
 	apr_shm_attach
+	apr_shm_attach_ex
 	apr_shm_baseaddr_get
 	apr_shm_create
+	apr_shm_create_ex
 	apr_shm_destroy
 	apr_shm_detach
 	apr_shm_pool_get
@@ -285,12 +307,32 @@ EXPORTS
 	apr_signal_block
 	apr_signal_description_get
 	apr_signal_unblock
+	apr_skiplist_add_index
+	apr_skiplist_alloc
+	apr_skiplist_destroy
+	apr_skiplist_find
+	apr_skiplist_find_compare
+	apr_skiplist_free
+	apr_skiplist_getlist
+	apr_skiplist_init
+	apr_skiplist_insert
+	apr_skiplist_insert_compare
+	apr_skiplist_merge
+	apr_skiplist_next
+	apr_skiplist_peek
+	apr_skiplist_pop
+	apr_skiplist_previous
+	apr_skiplist_remove
+	apr_skiplist_remove_all
+	apr_skiplist_remove_compare
+	apr_skiplist_set_compare
 	apr_sleep
 	apr_snprintf
 	apr_sockaddr_equal
 	apr_sockaddr_info_get
 	apr_sockaddr_ip_get
 	apr_sockaddr_ip_getbuf
+	apr_sockaddr_is_wildcard
 	apr_socket_accept
 	apr_socket_addr_get
 	apr_socket_atmark
@@ -335,6 +377,7 @@ EXPORTS
 	apr_table_do
 	apr_table_elts
 	apr_table_get
+	apr_table_getm
 	apr_table_make
 	apr_table_merge
 	apr_table_mergen
@@ -403,6 +446,9 @@ EXPORTS
 	apr_uid_get
 	apr_uid_homepath_get
 	apr_uid_name_get
+	apr_unescape_entity
+	apr_unescape_hex
+	apr_unescape_url
 	apr_version
 	apr_version_string
 	apr_vformatter

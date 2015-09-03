@@ -69,6 +69,7 @@ EXPORTS
 	apr_base64_encode
 	apr_base64_encode_binary
 	apr_base64_encode_len
+	apr_bcrypt_encode
 	apr_brigade_cleanup
 	apr_brigade_create
 	apr_brigade_destroy
@@ -259,9 +260,11 @@ EXPORTS
 	apr_queue_trypush
 	apr_reslist_acquire
 	apr_reslist_acquired_count
+	apr_reslist_cleanup_order_set
 	apr_reslist_create
 	apr_reslist_destroy
 	apr_reslist_invalidate
+	apr_reslist_maintain
 	apr_reslist_release
 	apr_reslist_timeout_set
 	apr_rmm_addr_get
