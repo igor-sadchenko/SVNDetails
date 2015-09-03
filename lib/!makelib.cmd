@@ -1,6 +1,6 @@
 @echo off & setlocal
 
-set VS_DIR=c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\
+set VS_DIR=c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\
 set TSVN_DIR=c:\Program Files\TortoiseSVN\bin\
 set OUT_DIR=%~dp0
 
@@ -11,6 +11,7 @@ if /i "%TSVN_FILES%" == "" goto eof
 call "%VS_DIR%vcvarsall.bat" %1
 
 for %%x in (%TSVN_FILES%) do (
+  echo %%x
   lib.exe /def:"%OUT_DIR%%%x.def" /out:"%OUT_DIR%%%x.lib"
 )
 
