@@ -68,6 +68,7 @@ EXPORTS
 	_apr_base64_encode@12
 	_apr_base64_encode_binary@12
 	_apr_base64_encode_len@4
+	_apr_bcrypt_encode@24
 	_apr_brigade_cleanup@4
 	_apr_brigade_create@8
 	_apr_brigade_destroy@4
@@ -220,9 +221,11 @@ EXPORTS
 	_apr_queue_trypush@8
 	_apr_reslist_acquire@8
 	_apr_reslist_acquired_count@4
+	_apr_reslist_cleanup_order_set@8
 	_apr_reslist_create@40
 	_apr_reslist_destroy@4
 	_apr_reslist_invalidate@8
+	_apr_reslist_maintain@4
 	_apr_reslist_release@8
 	_apr_reslist_timeout_set@12
 	_apr_rmm_addr_get@8

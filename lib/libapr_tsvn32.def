@@ -50,6 +50,13 @@ EXPORTS
 	_apr_env_delete@8
 	_apr_env_get@12
 	_apr_env_set@12
+	_apr_escape_echo@20
+	_apr_escape_entity@20
+	_apr_escape_hex@20
+	_apr_escape_path@20
+	_apr_escape_path_segment@16
+	_apr_escape_shell@16
+	_apr_escape_urlencoded@16
 	_apr_file_append@16
 	_apr_file_attrs_set@16
 	_apr_file_buffer_set@12
@@ -138,6 +145,9 @@ EXPORTS
 	_apr_hash_pool_get@4
 	_apr_hash_set@16
 	_apr_hash_this@16
+	_apr_hash_this_key@4
+	_apr_hash_this_key_len@4
+	_apr_hash_this_val@4
 	_apr_initialize@0
 	_apr_ipsubnet_create@16
 	_apr_ipsubnet_test@8
@@ -185,6 +195,13 @@ EXPORTS
 	_apr_password_get@12
 	_apr_pcalloc@8
 	_apr_pcalloc_debug@12
+	_apr_pescape_echo@12
+	_apr_pescape_entity@12
+	_apr_pescape_hex@16
+	_apr_pescape_path@12
+	_apr_pescape_path_segment@8
+	_apr_pescape_shell@8
+	_apr_pescape_urlencoded@8
 	_apr_pmemdup@12
 	_apr_poll@20
 	_apr_poll_method_defname@0
@@ -262,11 +279,16 @@ EXPORTS
 	_apr_pstrdup@8
 	_apr_pstrmemdup@12
 	_apr_pstrndup@12
+	_apr_punescape_entity@8
+	_apr_punescape_hex@16
+	_apr_punescape_url@20
 	_apr_pvsprintf@12
 	_apr_rfc822_date@12
 	_apr_shm_attach@12
+	_apr_shm_attach_ex@16
 	_apr_shm_baseaddr_get@4
 	_apr_shm_create@16
+	_apr_shm_create_ex@20
 	_apr_shm_destroy@4
 	_apr_shm_detach@4
 	_apr_shm_pool_get@4
@@ -275,11 +297,31 @@ EXPORTS
 	_apr_signal_block@4
 	_apr_signal_description_get@4
 	_apr_signal_unblock@4
+	_apr_skiplist_add_index@12
+	_apr_skiplist_alloc@8
+	_apr_skiplist_destroy@8
+	_apr_skiplist_find@12
+	_apr_skiplist_find_compare@16
+	_apr_skiplist_free@8
+	_apr_skiplist_getlist@4
+	_apr_skiplist_init@8
+	_apr_skiplist_insert@8
+	_apr_skiplist_insert_compare@12
+	_apr_skiplist_merge@8
+	_apr_skiplist_next@8
+	_apr_skiplist_peek@4
+	_apr_skiplist_pop@8
+	_apr_skiplist_previous@8
+	_apr_skiplist_remove@12
+	_apr_skiplist_remove_all@8
+	_apr_skiplist_remove_compare@16
+	_apr_skiplist_set_compare@12
 	_apr_sleep@8
 	_apr_sockaddr_equal@8
 	_apr_sockaddr_info_get@24
 	_apr_sockaddr_ip_get@8
 	_apr_sockaddr_ip_getbuf@12
+	_apr_sockaddr_is_wildcard@4
 	_apr_socket_accept@12
 	_apr_socket_addr_get@12
 	_apr_socket_atmark@8
@@ -323,6 +365,7 @@ EXPORTS
 	_apr_table_copy@8
 	_apr_table_elts@4
 	_apr_table_get@8
+	_apr_table_getm@12
 	_apr_table_make@8
 	_apr_table_merge@12
 	_apr_table_mergen@12
@@ -390,6 +433,9 @@ EXPORTS
 	_apr_uid_get@16
 	_apr_uid_homepath_get@12
 	_apr_uid_name_get@12
+	_apr_unescape_entity@16
+	_apr_unescape_hex@20
+	_apr_unescape_url@28
 	_apr_version@4
 	_apr_version_string@0
 	_apr_vformatter@16
