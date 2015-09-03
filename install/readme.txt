@@ -1,4 +1,4 @@
-SVNDetails - a TortoiseSVN plugin for Total Commander 7.x
+SVNDetails - a TortoiseSVN plugin for Total Commander 8.x
 =========================================================
 
 Plugin description
@@ -16,8 +16,8 @@ SVNDetails is a content plugin and displays the following TortoiseSVN fields in 
 Prerequisites
 -------------
 
-This plugin has been successfully tested with Total Commander (x64) 8.01 and TortoiseSVN 1.7.13, Build 24257
-on Microsoft Windows 7 Enterprise (x64), but it MAY work with other versions, too ;-)
+This plugin has been successfully tested with Total Commander (x64) 8.52 and TortoiseSVN 1.9.1, Build 26747
+on Microsoft Windows 8.1 Enterprise (x64), but it MAY work with other versions, too ;-)
 
 
 Installation
@@ -35,6 +35,10 @@ Configure user defined columns and add the desired TortoiseSVN fields.
 
 Version history
 ---------------
+
+Version 3.10 (20150903)
+  CHANGE: Supports TortoiseSVN 1.9.x
+  CHANGE: Update project to Microsoft Visual Studio 2015
 
 Version 3.02 (20130620)
   BUGFIX: Crash on Windows 8 if no TortoiseSVN shell icons are being displayed (Thanks to tufftaeh for
@@ -89,7 +93,7 @@ Version 1.00 (20080107)
 License
 -------
 
-Copyright (c) 2008-2011 by Thomas Hein, INFORM GmbH, Germany
+Copyright (c) 2008-2015 by Thomas Hein, INFORM GmbH, Germany
 
 This plugin is freeware.
 
